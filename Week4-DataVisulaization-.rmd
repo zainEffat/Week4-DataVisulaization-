@@ -1,0 +1,125 @@
+---
+title: "Week4Lecture"
+author: "Zain"
+date: "9/19/2021"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Tidyverse
+tidyverse package contains the ggplot library that we will use for graph. So, we will import tidyverse first
+
+```{r}
+library(tidyverse)
+```
+###Importing data
+Let us import the dataset
+```{r}
+mn_homes <- read_csv("data/mn_homes.csv")
+glimpse(mn_homes)
+summary(mn_homes)
+```
+###first ggplot :)
+ggplot just give you the basic background of the plot
+
+```{r}
+ggplot(data = mn_homes,mapping = aes(x=area,y=salesprice))
+```
+Now, let us add the actual values
+
+```{r}
+ggplot(data = mn_homes,mapping = aes(x=area,y=salesprice))+
+  geom_point()+
+  geom_smooth()
+```
+Now, let us draw three variables in our diagram
+
+```{r}
+ggplot(data = mn_homes,mapping = aes(x=area,y=salesprice,color=fireplace))+
+  geom_point()
+```
+
+different variable for color
+```{r}
+ggplot(data = mn_homes,mapping = aes(x=area,y=salesprice,color=community))+
+  geom_point()
+```
+Quick Revision for the last session
+```{r}
+ggplot(data=mn_homes, mapping = aes(x=area,y=salesprice)) +
+  geom_point()
+```
+
+```{r}
+ggplot(data=mn_homes, mapping = aes(x=area,y=salesprice, color=community)) +
+  geom_point()
+```
+
+### Adding lables to the graph
+
+```{r}
+ggplot(data=mn_homes, mapping = aes(x=area,y=salesprice, color=community)) +
+  geom_point() +
+  labs(title="The relation betweem house area and the sales price (2005-2015)", x="Area of the huose in square foot", y="Sales price of houses")
+```
+##Faceting
+Sometimes we get too much points in our graph. We can use faceting to seperate them in several graphs. for example:
+
+```{r}
+ggplot(data=mn_homes, mapping = aes(x=area,y=salesprice, color=community)) +
+  geom_point() +
+  facet_wrap(~community)
+```
+
+
+The other type of faceting is facet_grid(). It help you to categorize your charts based on two variables. For example:
+
+```{r}
+ggplot(data=mn_homes, mapping = aes(x=area,y=salesprice, color=community)) +
+  geom_point() +
+  facet_grid(community~beds)
+```
+let us get back to geom_smooth and check the linetype attribute
+
+```{r}
+ggplot(data=mn_homes, mapping = aes(x=area, y=salesprice, linetype=fireplace))+
+  geom_point()+
+  geom_smooth()
+```
+##geom_bar()
+We use geom_bar with discrete variables. It ussually use on variable only
+
+```{r}
+ggplot(data=mn_homes) +
+  geom_bar(mapping=aes(x=community))
+```
+
+count is the default y axis for the bar chart. However, we can change this manually to percentage. for example:
+
+```{r}
+ggplot(data=mn_homes) +
+  geom_bar(mapping=aes(x=community, y=..prop.., group=1))
+```
+
+We can add more variables to bar charts using color or fill attributes
+
+```{r}
+ggplot(data=mn_homes) +
+  geom_bar(mapping=aes(x=saleyear,fill=community))
+
+```
+### poistion attribute for bar chart
+
+```{r}
+ggplot(data=mn_homes) +
+  geom_bar(mapping=aes(x=community,fill=fireplace),position="dodge")
+```
+
+```{r}
+ggplot(data=mn_homes) +
+  geom_bar(mapping=aes(x=community,fill=fireplace),position="identity", alpha=1/5)
+```
+
